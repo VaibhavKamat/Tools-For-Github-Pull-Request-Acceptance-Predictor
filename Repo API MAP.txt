@@ -1,0 +1,18 @@
+
+http://data.gharchive.org/2015-01-01-15.json.gz ( MAIN GIT TRAFFIC DATA IN GIT AT A PARTICULAR TIME ON A CERTAIN DATE)
+            |
+           \ /
+NAME(repo name)   OWNER/LOGIN (user name)  WATCHERS_COUNT FORKS_COUNT 
+DESCRIPTION (repor description)  OPEN_ISSUES_COUNT
+OWNER/URL ( User URL with account data)
+FORKS_URL (number of forks, forked repos and their info etc)  
+CONTENTS_URL ( Different files and their commits id and other data about the contents)
+PULLS_URL  ( data about a particular pull request)
+COMMITS_URL (commits count on master, types of commits etc) 
+
+PULLS_URL( data about a particular pull request)
+            |
+           \ /
+COMMITS_URL (gives data about different commit, number of commit in a pull request etc)
+OPEN_ISSUES_COUNT
+CONTRIBUTORS_URL ( No of contributors, data of contributors etc)
