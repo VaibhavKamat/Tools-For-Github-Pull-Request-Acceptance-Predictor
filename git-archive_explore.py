@@ -123,6 +123,7 @@ def pull_acceptance_probability(pulls_url):
     pulls_data = requests.get(url=pulls_url,auth=(USERNAME,PASSWORD)).json()
     pulls_closed = 0 
     total_merged = 0
+    pulls_prob = 0
     
     for i in range(len(pulls_data)):
         if(pulls_data[i]['state']=='closed'):
