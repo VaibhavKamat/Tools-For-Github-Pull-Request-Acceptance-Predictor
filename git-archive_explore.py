@@ -145,6 +145,24 @@ def generate_timedelta(repo_link):
     seconds_last_push = (b-a).total_seconds()
     return seconds_last_push
 
+def calculate_pull_latency(pull_url):
+    pull_data = requests.get(pull_url,auth=(USERNAME,PASSWORD)).json()
+    a = datetime.datetime.strptime(pull_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+    if pull_data['state'] == 'closed':
+        b=datetime.datetime.strptime(pull_data['closed_at'], "%Y-%m-%dT%H:%M:%SZ")
+        seconds_last_push = (b-a).total_seconds()
+        pull_latency= int(seconds_last_push/60)
+        pull_latency = pull_latency/60
+        return pull_latency
+    else:
+        return 0
+    
+def calculate_total_no_review_comments(pull_url):
+    review_comment_url = pull_url+"/comments"
+    review_comment_data = requests.get(url=review_comment_url,auth=(USERNAME,PASSWORD)).json()
+    review_comment_count = len(review_comment_data)
+    return review_comment_count
+
 def generate_repo_data(repo_link):
     """Generate repo data, which includes watchers, forks, open issues and commits for a particular repository"""
     repo_data = {}
@@ -224,6 +242,8 @@ def get_pullrequest_data(repo_links):
                 features_dict[pull_request['id']]['files_changed'] = diff_status(pull_request['patch_url'])[0]
                 features_dict[pull_request['id']]['insertions'] = diff_status(pull_request['patch_url'])[1]
                 features_dict[pull_request['id']]['deletions'] = diff_status(pull_request['patch_url'])[2]
+                features_dict[pull_request['id']]['pull_latency'] = calculate_pull_latency(pull_request['url'])
+                features_dict[pull_request['id']]['review_comments'] = calculate_total_no_review_comments(pull_request['url'])
                 
                 print("pull request URL",pull_request['url'])
                 features_dict[pull_request['id']]['status'] = get_label(pull_request['url'])
@@ -246,8 +266,10 @@ def generate_features(features_dict):
         files_changed = values['files_changed']
         insertions = values['insertions']
         deletions = values['deletions']
+        pull_latency = values['pull_latency']
+        review_comments = values['review_comments']
         status = values['status']
-        features.append([watchers,forks,open_issues,repo_commits,commits,time_delta,pulls_prob,files_changed,insertions,deletions,status])
+        features.append([watchers,forks,open_issues,repo_commits,commits,time_delta,pulls_prob,files_changed,insertions,deletions,pull_latency,review_comments,status])
     features = np.array(features)
     
     return features
