@@ -74,7 +74,7 @@ def generate_repo_list(file_name):
         except:
             print(repo_data['repo']['url']+" not reachable")
             continue
-    return repo_list[91:92]
+    return repo_list[0:21]
 
 
 def get_watchers_count(repo_link):
@@ -283,7 +283,7 @@ def get_label(pull_url):
     pulls_data = requests.get(url=pull_url,auth=(USERNAME,PASSWORD)).json()
     if label_status.status_code == 204:
         return 1
-    if label_status.status_code == 404:
+    elif label_status.status_code == 404:
         if pulls_data['state'] == 'closed':
             return 0
         elif pulls_data['state'] == 'open':
@@ -299,8 +299,10 @@ def get_label(pull_url):
 
 set_proxy()
 repo_list = generate_repo_list(r'D:\ML\TExT\ML Git Use Case\gitarchive\2018-01-01-12.json')
-features_dict = get_pullrequest_data(['https://api.github.com/repos/bitpay/bitcore'])
+features_dict = get_pullrequest_data(repo_list)
 print(features_dict)
+with open('feature_dict_0-20.json', 'a') as outfile:
+   json.dump(features_dict, outfile)
 '''
 print(features_dict)
 
