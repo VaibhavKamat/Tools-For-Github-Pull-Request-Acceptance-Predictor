@@ -146,6 +146,8 @@ def generate_timedelta(repo_link):
     return seconds_last_push
 
 def calculate_pull_latency(pull_url):
+    """Returns the time in hours between which the pull request was created
+       and the time it was closed"""
     pull_data = requests.get(pull_url,auth=(USERNAME,PASSWORD)).json()
     a = datetime.datetime.strptime(pull_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
     if pull_data['state'] == 'closed':
@@ -158,6 +160,7 @@ def calculate_pull_latency(pull_url):
         return 0
     
 def calculate_total_no_review_comments(pull_url):
+    """Returns the total number of review comments for a particular pull request"""
     review_comment_url = pull_url+"/comments"
     review_comment_data = requests.get(url=review_comment_url,auth=(USERNAME,PASSWORD)).json()
     review_comment_count = len(review_comment_data)
@@ -297,7 +300,7 @@ def get_label(pull_url):
 #https://api.github.com/repos/bitpay/bitcore/pulls/1544/merge 
 #https://api.github.com/repos/getify/You-Dont-Know-JS/pulls?page=1&per_page=100&state=all
 
-set_proxy()
+#set_proxy()
 repo_list = generate_repo_list(r'D:\ML\TExT\ML Git Use Case\gitarchive\2018-01-01-12.json')
 features_dict = get_pullrequest_data(repo_list)
 print(features_dict)
