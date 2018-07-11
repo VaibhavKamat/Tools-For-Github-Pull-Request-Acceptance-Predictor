@@ -120,7 +120,7 @@ def get_number_of_commits_for_pullrequest(repo_link,pull_request_number):
 
 def pull_acceptance_probability(pull_url):
     """Returns the pull request acceptance probability of a particular repository"""
-    pulls_data = requests.get(url=pulls_url,auth=(USERNAME,PASSWORD)).json()
+    pulls_data = requests.get(url=pull_url,auth=(USERNAME,PASSWORD)).json()
     pulls_closed = 0 
     total_merged = 0
     pulls_prob = 0
