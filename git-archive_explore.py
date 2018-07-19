@@ -255,27 +255,34 @@ def get_pullrequest_data(repo_links):
             continue
     return features_dict
 
-def generate_features(features_dict):
-    """Generate feature in the form of numpy array. This function will take feature dictionary as an input"""
+def generate_features(features_dict_path):
+    """Generate features in the form of numpy array. This function will take a directory path to json files as an input"""
     features = []
-    for key,values in features_dict.items():
-        watchers = values['watchers']
-        forks = values['forks']
-        open_issues = values['open_issues']
-        repo_commits = values['repo_commits']
-        commits = values['commits']
-        time_delta = values['time_delta']
-        pulls_prob = values['pulls_prob']
-        files_changed = values['files_changed']
-        insertions = values['insertions']
-        deletions = values['deletions']
-        pull_latency = values['pull_latency']
-        review_comments = values['review_comments']
-        status = values['status']
-        features.append([watchers,forks,open_issues,repo_commits,commits,time_delta,pulls_prob,files_changed,insertions,deletions,pull_latency,review_comments,status])
-    features = np.array(features)
+    labels = []
+    for file in os.listdir(features_dict_path):
+        print(file)
+        features_dict = json.load(open(features_dict_path+'\\'+file,'r'))
     
-    return features
+        for key,values in features_dict.items():
+            watchers = values['watchers']
+            forks = values['forks']
+            open_issues = values['open_issues']
+            repo_commits = values['repo_commits']
+            commits = values['commits']
+            time_delta = values['time_delta']
+            pulls_prob = values['pulls_prob']
+            files_changed = values['files_changed']
+            insertions = values['insertions']
+            deletions = values['deletions']
+            pull_latency = values['pull_latency']
+            review_comments = values['review_comments']
+            status = values['status']
+            features.append([watchers,forks,open_issues,repo_commits,commits,time_delta,pulls_prob,files_changed,insertions,deletions,pull_latency,review_comments])
+            labels.append(status)
+    features = np.array(features)
+    labels = np.array(labels)
+    
+    return features,labels
 
 def get_label(pull_url):
     """Get pull request status for a particular pull request"""
