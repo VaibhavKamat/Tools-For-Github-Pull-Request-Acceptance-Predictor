@@ -74,7 +74,7 @@ def generate_repo_list(file_name):
         except:
             print(repo_data['repo']['url']+" not reachable")
             continue
-    return repo_list[0:21]
+    return list(set(repo_list[0:21]))
 
 
 def get_watchers_count(repo_link):
